@@ -1,0 +1,4 @@
+../Core/Src/DHT11.c:21:6:microDelay	2
+../Core/Src/DHT11.c:27:9:DHT11_Start	5
+../Core/Src/DHT11.c:56:9:DHT11_Read	7
+../Core/Src/DHT11.c:80:6:DHT11_READ_TEMP_AND_HUM	3

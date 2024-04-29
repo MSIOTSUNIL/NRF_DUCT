@@ -1,0 +1,10 @@
+11:53:57 **** Incremental Build of configuration Debug for project DHT11_N ****
+make -j8 all 
+arm-none-eabi-size  DHT11_N.elf 
+   text	   data	    bss	    dec	    hex	filename
+  10544	     12	   1668	  12224	   2fc0	DHT11_N.elf
+Finished building: default.size.stdout
+ 
+
+11:53:58 Build Finished. 0 errors, 0 warnings. (took 376ms)
+

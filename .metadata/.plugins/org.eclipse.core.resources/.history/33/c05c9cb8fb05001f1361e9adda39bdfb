@@ -1,0 +1,17 @@
+/*
+ * DHT11.c
+ *
+ *  Created on: Apr 29, 2024
+ *      Author: sunil
+ */
+
+
+#include "DHT11.h"
+#define DHT11_PORT GPIOA
+#define DHT11_PIN GPIO_PIN_4
+
+uint8_t RHI, RHD, TCI, TCD, SUM;
+uint32_t pMillis, cMillis;
+float tCelsius = 0;
+float tFahrenheit = 0;
+float RH = 0;

@@ -60,8 +60,8 @@ all: main-build
 main-build: DHT11_N.elf secondary-outputs
 
 # Tool invocations
-DHT11_N.elf DHT11_N.map: $(OBJS) $(USER_OBJS) C:\Users\sunil\OneDrive\Desktop\FARAZ_SIR\MS_IOT_IR_TRANSMITTER\DHT11_N\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "DHT11_N.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\sunil\OneDrive\Desktop\FARAZ_SIR\MS_IOT_IR_TRANSMITTER\DHT11_N\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DHT11_N.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+DHT11_N.elf DHT11_N.map: $(OBJS) $(USER_OBJS) C:\Users\sunil\OneDrive\Desktop\MSIOT_STM32CUBEIDE\NRF_DUCT\DHT11_N\STM32F103C8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "DHT11_N.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\sunil\OneDrive\Desktop\MSIOT_STM32CUBEIDE\NRF_DUCT\DHT11_N\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DHT11_N.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
