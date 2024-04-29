@@ -1,0 +1,14 @@
+/*
+ * utility.h
+ *
+ *  Created on: Apr 29, 2024
+ *      Author: sunil
+ */
+
+#ifndef INC_UTILITY_H_
+#define INC_UTILITY_H_
+
+#define Debug_Port &huart1
+
+
+#endif /* INC_UTILITY_H_ */

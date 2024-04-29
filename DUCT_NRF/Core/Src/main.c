@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -26,6 +27,10 @@
 /* USER CODE BEGIN Includes */
 #include "DHT11.h"
 #include "C02_HC8.h"
+#include "MY_NRF24.h"
+#include "nrf_helper.h"
+#include "ee.h"
+#include "utility.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -61,117 +66,174 @@ void SystemClock_Config(void);
 //GLOBAL VARIABLES
 uint8_t r; //FOR HUART2 INTERRUPT
 
+/*============HANDLE DEBUG PORT DATA===============*/
+uint8_t rx_buffer_pos;
+uint8_t rx_data[2];
+uint8_t received_data_from_UART[32];
+bool data_avlbl_from_UART_to_read = false;
+
+//NRF CREDENTAILS
+extern uint64_t My_Pipe_Address;
+extern uint8_t My_Channel_Num;
+extern uint64_t target_pipe_addr;
+extern uint8_t target_channel_addr;
+extern char my_node_id[2];
 
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
-int main(void)
-{
+ * @brief  The application entry point.
+ * @retval int
+ */
+int main(void) {
 
-  /* USER CODE BEGIN 1 */
+	/* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
+	/* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+	/* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	HAL_Init();
 
-  /* USER CODE BEGIN Init */
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	/* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* Configure the system clock */
+	SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+	/* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+	/* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_TIM1_Init();
-  MX_USART2_UART_Init();
-  /* USER CODE BEGIN 2 */
+	/* Initialize all configured peripherals */
+	MX_GPIO_Init();
+	MX_TIM1_Init();
+	MX_USART2_UART_Init();
+	MX_SPI1_Init();
+	MX_USART1_UART_Init();
+	/* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start(&htim1);
-	HAL_UART_Receive_IT(&huart2, &r, 1);
-	//INITIALIZE DHT11 AND DUCT
+	HAL_UART_Receive_IT(&huart2, &r, 1); //for C02
+	HAL_UART_Receive_IT(Debug_Port, (uint8_t*) rx_data, 1); //FOR DEBUG
 
-  /* USER CODE END 2 */
+	//Read PIPE ADDRESS / CHANNEL NUMBER data from flash memory
+	uint64_t READ_PIPE_ADRESS = ee_read_64(FLASH_ADDR_4_PIPE_ADDR_FOR_NRF);
+	My_Pipe_Address = READ_PIPE_ADRESS;
+	My_Channel_Num = ee_read_16(FLASH_ADDR_4_Self_Channel);
+	target_pipe_addr = READ_PIPE_ADRESS;
 
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+	target_pipe_addr = READ_PIPE_ADRESS;
+	target_channel_addr = My_Channel_Num;
+
+	uint16_t my_device_id = ee_read_16(FLASH_ADDR_4_DEVICE_ID);
+	// Split the uint16_t value into two uint8_t values
+	my_node_id[0] = my_device_id & 0xFF;         // Least significant byte
+	my_node_id[1] = (my_device_id >> 8) & 0xFF;  // Most significant byte
+
+	nrf_init();
+	/* USER CODE END 2 */
+
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
 	while (1) {
-    /* USER CODE END WHILE */
+		/* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+		/* USER CODE BEGIN 3 */
+		if (NRF24_available()) {
+			Manage_NRF_Data();
+		}
+		//=====HANDLE UART DEBUG PORT DATA
+		if (data_avlbl_from_UART_to_read) {
+			Print_Debug_Data(
+					(char*) "\nMSG received from UART DEBUG PORT ::> ");
+			HAL_UART_Transmit(&huart1, received_data_from_UART, 32, 100);
+			Print_Debug_Data((char*) "\n");
+			Manage_Received_Data_From_UART((uint8_t*) received_data_from_UART,
+					32);
+			//AFTER USING THE DATA CLEAR THE RX BUFFER
+			uint8_t i;
+			if (rx_buffer_pos == 0) { //RESET THE BUFFER ONLY WHEN RX { BUFFER == 0 }
+				for (i = 0; i < 20; i++)
+					received_data_from_UART[i] = 0;
+			}
+			data_avlbl_from_UART_to_read = false;
+		}
 		DHT11_READ_TEMP_AND_HUM();
 		HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 		HAL_Delay(100);
 	}
-  /* USER CODE END 3 */
+	/* USER CODE END 3 */
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
-void SystemClock_Config(void)
-{
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+ * @brief System Clock Configuration
+ * @retval None
+ */
+void SystemClock_Config(void) {
+	RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
+	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
 
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
-  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
-  RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
+	/** Initializes the RCC Oscillators according to the specified parameters
+	 * in the RCC_OscInitTypeDef structure.
+	 */
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+	RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+	RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+	RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+	RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
+		Error_Handler();
+	}
 
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+	/** Initializes the CPU, AHB and APB buses clocks
+	 */
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
+			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
+	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK) {
+		Error_Handler();
+	}
 }
 
 /* USER CODE BEGIN 4 */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+	if (huart->Instance == USART2) {
 		PROCESS_C02(r);
+	}
+	if (huart->Instance == USART1) {
+		if (rx_data[0] != '/') { //if it is not equal to 'COMMAND END' then write data into INCREMENTED POS of rx_buffer
+			received_data_from_UART[rx_buffer_pos++] = rx_data[0];
+
+		} else { // HERE IT MEANS if(rx_data[0] == '/') IF it is equal to 'COMMAND END' then clear the buffer, compare data and move on
+			rx_buffer_pos = 0;
+			//USE THE DATA RECEIVED FROM INTERRUTP HERE
+			data_avlbl_from_UART_to_read = true;
+			//process the data, and clear the buffer
+		}
+		HAL_UART_Receive_IT(&huart1, rx_data, 1); //REINIT THE UART INTERRUPT NOW
+	}
 }
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
-void Error_Handler(void)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
+void Error_Handler(void) {
+	/* USER CODE BEGIN Error_Handler_Debug */
 	/* User can add his own implementation to report the HAL error return state */
 	__disable_irq();
 	while (1) {
 	}
-  /* USER CODE END Error_Handler_Debug */
+	/* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT

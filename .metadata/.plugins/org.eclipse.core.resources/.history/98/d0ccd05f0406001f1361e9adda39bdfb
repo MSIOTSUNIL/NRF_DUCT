@@ -1,0 +1,26 @@
+/*
+ * utility.c
+ *
+ *  Created on: Apr 29, 2024
+ *      Author: sunil
+ */
+
+#include "utility.h"
+
+void Manage_NRF_Data() {
+	char received_data_from_gateway[50] = "";
+	NRF24_read(received_data_from_gateway, 5); //store received data
+
+	//copy the 3rd byte, it is the command
+	char rcvd_command;
+	rcvd_command = received_data_from_gateway[2];
+
+	//commands
+	char set_temperature = '0';
+	char read_temperature = '1';
+}
+
+void Print_Debug_Data(char *Debug_Msg) {
+	HAL_UART_Transmit(&huart2, (const uint8_t*) Debug_Msg, strlen(Debug_Msg),
+			200);
+}

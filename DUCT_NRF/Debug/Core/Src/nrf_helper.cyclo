@@ -1,0 +1,6 @@
+../Core/Src/nrf_helper.c:22:6:nrf_init	1
+../Core/Src/nrf_helper.c:31:6:Switch_to_Transmitt_mode	1
+../Core/Src/nrf_helper.c:36:6:Switch_to_Receiver_mode	1
+../Core/Src/nrf_helper.c:42:6:TRANSMITT_UPDATE_OVER_NRF	3
+../Core/Src/nrf_helper.c:61:6:Data_Available_For_Reading_NRF	1
+../Core/Src/nrf_helper.c:64:6:READ_NRF_AVAILABLE_DATA	2

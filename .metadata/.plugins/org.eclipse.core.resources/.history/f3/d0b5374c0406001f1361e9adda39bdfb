@@ -1,0 +1,19 @@
+/*
+ * utility.c
+ *
+ *  Created on: Apr 29, 2024
+ *      Author: sunil
+ */
+
+void Manage_NRF_Data() {
+	char received_data_from_gateway[50] = "";
+	NRF24_read(received_data_from_gateway, 5); //store received data
+
+	//copy the 3rd byte, it is the command
+	char rcvd_command;
+	rcvd_command = received_data_from_gateway[2];
+
+	//commands
+	char set_temperature = '0';
+	char read_temperature = '1';
+}
