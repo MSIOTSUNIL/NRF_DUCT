@@ -77,7 +77,7 @@ void Transmitt_reply_to_gateway(char *msg) {
 	HAL_UART_Transmit(&huart1,
 			(uint8_t*) "\nTransmitting reply to gateway .. waiting for ack",
 			strlen("\nTransmitting reply to gateway .. waiting for ack"), 10);
-	char received_data_from_srvr1[10];
+	char received_data_from_srvr1[40];
 	memcpy(received_data_from_srvr1, msg, 32);
 	for (int i = 0; i <= 10; i++) {
 		if (!NRF24_write(received_data_from_srvr1, 32)) {
@@ -88,7 +88,7 @@ void Transmitt_reply_to_gateway(char *msg) {
 			HAL_UART_Transmit(&huart1,
 					(uint8_t*) "\nReply Transmitted to gateway successfully",
 					strlen("\nReply Transmitted to gateway successfully"), 10);
-			return;
+			break;
 		}
 	}
 	HAL_UART_Transmit(&huart1,

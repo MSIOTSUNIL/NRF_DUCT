@@ -87,7 +87,6 @@ bool DHT11_READ_TEMP_AND_HUM() {
 		TCD = DHT11_Read(); // Celsius decimal
 		SUM = DHT11_Read(); // Check sum
 		if (RHI + RHD + TCI + TCD == SUM) {
-			HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
 			// Can use RHI and TCI for any purposes if whole number only needed
 			tCelsius = (float) TCI + (float) (TCD / 10.0);
 			tFahrenheit = tCelsius * 9 / 5 + 32;

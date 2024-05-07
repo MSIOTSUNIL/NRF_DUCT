@@ -1,31 +1,10 @@
-13:48:20 **** Incremental Build of configuration Debug for project DUCT_NRF ****
+17:21:01 **** Incremental Build of configuration Debug for project DUCT_NRF ****
 make -j8 all 
-arm-none-eabi-gcc "../Core/Src/utility.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103xB -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/utility.d" -MT"Core/Src/utility.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/utility.o"
-../Core/Src/utility.c: In function 'Manage_NRF_Data':
-../Core/Src/utility.c:45:40: warning: format '%d' expects argument of type 'int', but argument 3 has type 'uint32_t' {aka 'long unsigned int'} [-Wformat=]
-   45 |                 sprintf(return_data, "%d", PPM_VALUE);
-      |                                       ~^   ~~~~~~~~~
-      |                                        |   |
-      |                                        int uint32_t {aka long unsigned int}
-      |                                       %ld
-../Core/Src/utility.c: In function 'Transmitt_reply_to_gateway':
-../Core/Src/utility.c:81:9: warning: 'memcpy' writing 32 bytes into a region of size 10 overflows the destination [-Wstringop-overflow=]
-   81 |         memcpy(received_data_from_srvr1, msg, 32);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../Core/Src/utility.c:80:14: note: destination object 'received_data_from_srvr1' of size 10
-   80 |         char received_data_from_srvr1[10];
-      |              ^~~~~~~~~~~~~~~~~~~~~~~~
-arm-none-eabi-gcc -o "DUCT_NRF.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\sunil\OneDrive\Desktop\MSIOT_STM32CUBEIDE\NRF_DUCT\DUCT_NRF\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="DUCT_NRF.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
-Finished building target: DUCT_NRF.elf
- 
 arm-none-eabi-size  DUCT_NRF.elf 
-arm-none-eabi-objdump -h -S DUCT_NRF.elf  > "DUCT_NRF.list"
    text	   data	    bss	    dec	    hex	filename
-  49104	    468	   2544	  52116	   cb94	DUCT_NRF.elf
+  49096	    468	   2544	  52108	   cb8c	DUCT_NRF.elf
 Finished building: default.size.stdout
  
-Finished building: DUCT_NRF.list
- 
 
-13:48:22 Build Finished. 0 errors, 2 warnings. (took 1s.339ms)
+17:21:02 Build Finished. 0 errors, 0 warnings. (took 567ms)
 

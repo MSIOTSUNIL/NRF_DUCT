@@ -1,6 +1,6 @@
 ../Drivers/CMSIS/Include/core_cm3.h:1762:34:__NVIC_SystemReset	4	static,ignoring_inline_asm
 ../Core/Src/utility.c:18:6:Manage_NRF_Data	112	static
-../Core/Src/utility.c:76:6:Transmitt_reply_to_gateway	32	static
+../Core/Src/utility.c:76:6:Transmitt_reply_to_gateway	64	static
 ../Core/Src/utility.c:100:6:Print_Debug_Data	16	static
 ../Core/Src/utility.c:104:6:Manage_Received_Data_From_UART	48	static
 ../Core/Src/utility.c:183:10:Get_Pipe_Address	16	static
