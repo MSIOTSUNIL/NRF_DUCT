@@ -42,7 +42,7 @@ void Manage_NRF_Data() {
 	} else if (rcvd_command == get_CO2) {  //Read Temp From Sensor
 		DHT11_READ_TEMP_AND_HUM();
 		// Convert float to string
-		sprintf(return_data, "%d", PPM_VALUE);
+		sprintf(return_data, "%lu", PPM_VALUE);
 	} else {
 		Print_Debug_Data((char*) "INVALID COMMAND RECEIVED \n");
 		return;

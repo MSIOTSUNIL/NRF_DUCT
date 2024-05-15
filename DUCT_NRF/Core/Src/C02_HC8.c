@@ -49,7 +49,7 @@ void PROCESS_C02(uint8_t c) {
 	case CO2_STATE_BYTE_7:
 		current_c02_state = CO2_STATE_BYTE_8;
 		C02_LOW_BYTE = c;
-		PPM_VALUE = (C02_HIGH_BYTE*256) + C02_LOW_BYTE;
+		PPM_VALUE = (C02_HIGH_BYTE * 256) + C02_LOW_BYTE;
 		break;
 	case CO2_STATE_BYTE_8:
 		current_c02_state = CO2_STATE_BYTE_9;

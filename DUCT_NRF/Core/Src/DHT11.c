@@ -96,4 +96,5 @@ bool DHT11_READ_TEMP_AND_HUM() {
 		}
 		return false;
 	}
+	return false;
 }
