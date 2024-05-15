@@ -4343,18 +4343,17 @@ LOAD C:/ST/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .text.__NVIC_SystemReset
                 0x08003398       0x2c ./Core/Src/utility.o
  .text.Manage_NRF_Data
-                0x080033c4      0x178 ./Core/Src/utility.o
+                0x080033c4      0x17c ./Core/Src/utility.o
                 0x080033c4                Manage_NRF_Data
  .text.Transmitt_reply_to_gateway
-                0x0800353c       0xa4 ./Core/Src/utility.o
-                0x0800353c                Transmitt_reply_to_gateway
+                0x08003540       0xa4 ./Core/Src/utility.o
+                0x08003540                Transmitt_reply_to_gateway
  .text.Print_Debug_Data
-                0x080035e0       0x28 ./Core/Src/utility.o
-                0x080035e0                Print_Debug_Data
+                0x080035e4       0x28 ./Core/Src/utility.o
+                0x080035e4                Print_Debug_Data
  .text.Manage_Received_Data_From_UART
-                0x08003608      0x1dc ./Core/Src/utility.o
-                0x08003608                Manage_Received_Data_From_UART
- *fill*         0x080037e4        0x4 
+                0x0800360c      0x1dc ./Core/Src/utility.o
+                0x0800360c                Manage_Received_Data_From_UART
  .text.Get_Pipe_Address
                 0x080037e8      0x288 ./Core/Src/utility.o
                 0x080037e8                Get_Pipe_Address
@@ -5688,7 +5687,7 @@ LOAD C:/ST/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x0001a583      0x1ad ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.o
  .debug_macro   0x0001a730      0x1ae ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.o
 
-.debug_line     0x00000000    0x17623
+.debug_line     0x00000000    0x17626
  .debug_line    0x00000000      0x79a ./Core/Src/C02_HC8.o
  .debug_line    0x0000079a      0x8d4 ./Core/Src/DHT11.o
  .debug_line    0x0000106e     0x138e ./Core/Src/MY_NRF24.o
@@ -5704,19 +5703,19 @@ LOAD C:/ST/STM32CubeIDE_1.14.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_line    0x00006dce      0x79a ./Core/Src/system_stm32f1xx.o
  .debug_line    0x00007568      0x787 ./Core/Src/tim.o
  .debug_line    0x00007cef      0x801 ./Core/Src/usart.o
- .debug_line    0x000084f0      0xb2a ./Core/Src/utility.o
- .debug_line    0x0000901a       0x78 ./Core/Startup/startup_stm32f103c8tx.o
- .debug_line    0x00009092      0x9c7 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.o
- .debug_line    0x00009a59      0xbb3 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.o
- .debug_line    0x0000a60c      0xe20 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.o
- .debug_line    0x0000b42c      0xab0 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.o
- .debug_line    0x0000bedc      0xb97 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.o
- .debug_line    0x0000ca73      0xa60 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.o
- .debug_line    0x0000d4d3      0xdd0 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.o
- .debug_line    0x0000e2a3     0x1c79 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.o
- .debug_line    0x0000ff1c     0x34d1 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.o
- .debug_line    0x000133ed     0x1926 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.o
- .debug_line    0x00014d13     0x2910 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.o
+ .debug_line    0x000084f0      0xb2d ./Core/Src/utility.o
+ .debug_line    0x0000901d       0x78 ./Core/Startup/startup_stm32f103c8tx.o
+ .debug_line    0x00009095      0x9c7 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.o
+ .debug_line    0x00009a5c      0xbb3 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_cortex.o
+ .debug_line    0x0000a60f      0xe20 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_dma.o
+ .debug_line    0x0000b42f      0xab0 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash.o
+ .debug_line    0x0000bedf      0xb97 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_flash_ex.o
+ .debug_line    0x0000ca76      0xa60 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_gpio.o
+ .debug_line    0x0000d4d6      0xdd0 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_rcc.o
+ .debug_line    0x0000e2a6     0x1c79 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_spi.o
+ .debug_line    0x0000ff1f     0x34d1 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim.o
+ .debug_line    0x000133f0     0x1926 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.o
+ .debug_line    0x00014d16     0x2910 ./Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.o
 
 .debug_str      0x00000000    0x8f667
  .debug_str     0x00000000    0x84907 ./Core/Src/C02_HC8.o

@@ -21,7 +21,7 @@ void Manage_NRF_Data() {
 	NRF24_read(received_data_from_gateway, 5); //store received data
 
 	//copy the 3rd byte, it is the command
-	char rcvd_command;
+	char rcvd_command = 0;
 	rcvd_command = received_data_from_gateway[2];
 
 	//commands

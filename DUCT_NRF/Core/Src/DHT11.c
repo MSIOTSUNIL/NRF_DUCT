@@ -17,7 +17,6 @@ float RH = 0;
 
 //EXTERN
 extern TIM_HandleTypeDef htim1;
-extern float tCelsius;
 
 void microDelay(uint16_t delay) {
 	__HAL_TIM_SET_COUNTER(&htim1, 0);

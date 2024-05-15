@@ -37,15 +37,15 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  0001a8de  00000000  00000000  00025784  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   00017623  00000000  00000000  00040062  2**0
+ 17 .debug_line   00017626  00000000  00000000  00040062  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    0008f667  00000000  00000000  00057685  2**0
+ 18 .debug_str    0008f667  00000000  00000000  00057688  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000043  00000000  00000000  000e6cec  2**0
+ 19 .comment      00000043  00000000  00000000  000e6cef  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00006298  00000000  00000000  000e6d30  2**2
+ 20 .debug_frame  00006298  00000000  00000000  000e6d34  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_line_str 00000073  00000000  00000000  000ecfc8  2**0
+ 21 .debug_line_str 00000073  00000000  00000000  000ecfcc  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -1603,10 +1603,10 @@ void PROCESS_C02(uint8_t c) {
  80011ac:	200001f8 	.word	0x200001f8
 
 080011b0 <microDelay>:
+float RH = 0;
 
 //EXTERN
 extern TIM_HandleTypeDef htim1;
-extern float tCelsius;
 
 void microDelay(uint16_t delay) {
  80011b0:	b480      	push	{r7}
@@ -5261,7 +5261,7 @@ int main(void) {
  8002ac4:	d023      	beq.n	8002b0e <main+0xfa>
 			Print_Debug_Data(
  8002ac6:	4825      	ldr	r0, [pc, #148]	@ (8002b5c <main+0x148>)
- 8002ac8:	f000 fd8a 	bl	80035e0 <Print_Debug_Data>
+ 8002ac8:	f000 fd8c 	bl	80035e4 <Print_Debug_Data>
 					(char*) "\nMSG received from UART DEBUG PORT ::> ");
 			HAL_UART_Transmit(&huart1, received_data_from_UART, 32, 100);
  8002acc:	2364      	movs	r3, #100	@ 0x64
@@ -5271,11 +5271,11 @@ int main(void) {
  8002ad4:	f003 faa4 	bl	8006020 <HAL_UART_Transmit>
 			Print_Debug_Data((char*) "\n");
  8002ad8:	4822      	ldr	r0, [pc, #136]	@ (8002b64 <main+0x150>)
- 8002ada:	f000 fd81 	bl	80035e0 <Print_Debug_Data>
+ 8002ada:	f000 fd83 	bl	80035e4 <Print_Debug_Data>
 			Manage_Received_Data_From_UART((uint8_t*) received_data_from_UART,
  8002ade:	2120      	movs	r1, #32
  8002ae0:	481f      	ldr	r0, [pc, #124]	@ (8002b60 <main+0x14c>)
- 8002ae2:	f000 fd91 	bl	8003608 <Manage_Received_Data_From_UART>
+ 8002ae2:	f000 fd93 	bl	800360c <Manage_Received_Data_From_UART>
 					32);
 			//AFTER USING THE DATA CLEAR THE RX BUFFER
 			uint8_t i;
@@ -6973,554 +6973,554 @@ void Manage_NRF_Data() {
  80033e4:	f7fe fb5a 	bl	8001a9c <NRF24_read>
 
 	//copy the 3rd byte, it is the command
-	char rcvd_command;
+	char rcvd_command = 0;
+ 80033e8:	2300      	movs	r3, #0
+ 80033ea:	f887 3065 	strb.w	r3, [r7, #101]	@ 0x65
 	rcvd_command = received_data_from_gateway[2];
- 80033e8:	f897 3032 	ldrb.w	r3, [r7, #50]	@ 0x32
- 80033ec:	f887 3065 	strb.w	r3, [r7, #101]	@ 0x65
+ 80033ee:	f897 3032 	ldrb.w	r3, [r7, #50]	@ 0x32
+ 80033f2:	f887 3065 	strb.w	r3, [r7, #101]	@ 0x65
 
 	//commands
 	char get_temperature = '0';
- 80033f0:	2330      	movs	r3, #48	@ 0x30
- 80033f2:	f887 3064 	strb.w	r3, [r7, #100]	@ 0x64
+ 80033f6:	2330      	movs	r3, #48	@ 0x30
+ 80033f8:	f887 3064 	strb.w	r3, [r7, #100]	@ 0x64
 	char get_humidity = '1';
- 80033f6:	2331      	movs	r3, #49	@ 0x31
- 80033f8:	f887 3063 	strb.w	r3, [r7, #99]	@ 0x63
+ 80033fc:	2331      	movs	r3, #49	@ 0x31
+ 80033fe:	f887 3063 	strb.w	r3, [r7, #99]	@ 0x63
 	char get_CO2 = '2';
- 80033fc:	2332      	movs	r3, #50	@ 0x32
- 80033fe:	f887 3062 	strb.w	r3, [r7, #98]	@ 0x62
+ 8003402:	2332      	movs	r3, #50	@ 0x32
+ 8003404:	f887 3062 	strb.w	r3, [r7, #98]	@ 0x62
 
 	char return_data[10];
 	//==================if received command is to GET TEMPERATURE ===========//
 	if (rcvd_command == get_temperature) {  //Read Temp From Sensor
- 8003402:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
- 8003406:	f897 3064 	ldrb.w	r3, [r7, #100]	@ 0x64
- 800340a:	429a      	cmp	r2, r3
- 800340c:	d10e      	bne.n	800342c <Manage_NRF_Data+0x68>
+ 8003408:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
+ 800340c:	f897 3064 	ldrb.w	r3, [r7, #100]	@ 0x64
+ 8003410:	429a      	cmp	r2, r3
+ 8003412:	d10e      	bne.n	8003432 <Manage_NRF_Data+0x6e>
 		DHT11_READ_TEMP_AND_HUM();
- 800340e:	f7fd ffcf 	bl	80013b0 <DHT11_READ_TEMP_AND_HUM>
+ 8003414:	f7fd ffcc 	bl	80013b0 <DHT11_READ_TEMP_AND_HUM>
 		// Convert float to string
 		sprintf(return_data, "%f", tCelsius);
- 8003412:	4b41      	ldr	r3, [pc, #260]	@ (8003518 <Manage_NRF_Data+0x154>)
- 8003414:	681b      	ldr	r3, [r3, #0]
- 8003416:	4618      	mov	r0, r3
- 8003418:	f7fd f806 	bl	8000428 <__aeabi_f2d>
- 800341c:	4602      	mov	r2, r0
- 800341e:	460b      	mov	r3, r1
- 8003420:	f107 0024 	add.w	r0, r7, #36	@ 0x24
- 8003424:	493d      	ldr	r1, [pc, #244]	@ (800351c <Manage_NRF_Data+0x158>)
- 8003426:	f004 fb51 	bl	8007acc <siprintf>
- 800342a:	e029      	b.n	8003480 <Manage_NRF_Data+0xbc>
+ 8003418:	4b40      	ldr	r3, [pc, #256]	@ (800351c <Manage_NRF_Data+0x158>)
+ 800341a:	681b      	ldr	r3, [r3, #0]
+ 800341c:	4618      	mov	r0, r3
+ 800341e:	f7fd f803 	bl	8000428 <__aeabi_f2d>
+ 8003422:	4602      	mov	r2, r0
+ 8003424:	460b      	mov	r3, r1
+ 8003426:	f107 0024 	add.w	r0, r7, #36	@ 0x24
+ 800342a:	493d      	ldr	r1, [pc, #244]	@ (8003520 <Manage_NRF_Data+0x15c>)
+ 800342c:	f004 fb4e 	bl	8007acc <siprintf>
+ 8003430:	e029      	b.n	8003486 <Manage_NRF_Data+0xc2>
 	} else if (rcvd_command == get_humidity) {  //Read Temp From Sensor
- 800342c:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
- 8003430:	f897 3063 	ldrb.w	r3, [r7, #99]	@ 0x63
- 8003434:	429a      	cmp	r2, r3
- 8003436:	d10e      	bne.n	8003456 <Manage_NRF_Data+0x92>
+ 8003432:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
+ 8003436:	f897 3063 	ldrb.w	r3, [r7, #99]	@ 0x63
+ 800343a:	429a      	cmp	r2, r3
+ 800343c:	d10e      	bne.n	800345c <Manage_NRF_Data+0x98>
 		DHT11_READ_TEMP_AND_HUM();
- 8003438:	f7fd ffba 	bl	80013b0 <DHT11_READ_TEMP_AND_HUM>
+ 800343e:	f7fd ffb7 	bl	80013b0 <DHT11_READ_TEMP_AND_HUM>
 		// Convert float to string
 		sprintf(return_data, "%f", RH);
- 800343c:	4b38      	ldr	r3, [pc, #224]	@ (8003520 <Manage_NRF_Data+0x15c>)
- 800343e:	681b      	ldr	r3, [r3, #0]
- 8003440:	4618      	mov	r0, r3
- 8003442:	f7fc fff1 	bl	8000428 <__aeabi_f2d>
- 8003446:	4602      	mov	r2, r0
- 8003448:	460b      	mov	r3, r1
- 800344a:	f107 0024 	add.w	r0, r7, #36	@ 0x24
- 800344e:	4933      	ldr	r1, [pc, #204]	@ (800351c <Manage_NRF_Data+0x158>)
- 8003450:	f004 fb3c 	bl	8007acc <siprintf>
- 8003454:	e014      	b.n	8003480 <Manage_NRF_Data+0xbc>
+ 8003442:	4b38      	ldr	r3, [pc, #224]	@ (8003524 <Manage_NRF_Data+0x160>)
+ 8003444:	681b      	ldr	r3, [r3, #0]
+ 8003446:	4618      	mov	r0, r3
+ 8003448:	f7fc ffee 	bl	8000428 <__aeabi_f2d>
+ 800344c:	4602      	mov	r2, r0
+ 800344e:	460b      	mov	r3, r1
+ 8003450:	f107 0024 	add.w	r0, r7, #36	@ 0x24
+ 8003454:	4932      	ldr	r1, [pc, #200]	@ (8003520 <Manage_NRF_Data+0x15c>)
+ 8003456:	f004 fb39 	bl	8007acc <siprintf>
+ 800345a:	e014      	b.n	8003486 <Manage_NRF_Data+0xc2>
 	} else if (rcvd_command == get_CO2) {  //Read Temp From Sensor
- 8003456:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
- 800345a:	f897 3062 	ldrb.w	r3, [r7, #98]	@ 0x62
- 800345e:	429a      	cmp	r2, r3
- 8003460:	d10a      	bne.n	8003478 <Manage_NRF_Data+0xb4>
+ 800345c:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
+ 8003460:	f897 3062 	ldrb.w	r3, [r7, #98]	@ 0x62
+ 8003464:	429a      	cmp	r2, r3
+ 8003466:	d10a      	bne.n	800347e <Manage_NRF_Data+0xba>
 		DHT11_READ_TEMP_AND_HUM();
- 8003462:	f7fd ffa5 	bl	80013b0 <DHT11_READ_TEMP_AND_HUM>
+ 8003468:	f7fd ffa2 	bl	80013b0 <DHT11_READ_TEMP_AND_HUM>
 		// Convert float to string
 		sprintf(return_data, "%lu", PPM_VALUE);
- 8003466:	4b2f      	ldr	r3, [pc, #188]	@ (8003524 <Manage_NRF_Data+0x160>)
- 8003468:	681a      	ldr	r2, [r3, #0]
- 800346a:	f107 0324 	add.w	r3, r7, #36	@ 0x24
- 800346e:	492e      	ldr	r1, [pc, #184]	@ (8003528 <Manage_NRF_Data+0x164>)
- 8003470:	4618      	mov	r0, r3
- 8003472:	f004 fb2b 	bl	8007acc <siprintf>
- 8003476:	e003      	b.n	8003480 <Manage_NRF_Data+0xbc>
+ 800346c:	4b2e      	ldr	r3, [pc, #184]	@ (8003528 <Manage_NRF_Data+0x164>)
+ 800346e:	681a      	ldr	r2, [r3, #0]
+ 8003470:	f107 0324 	add.w	r3, r7, #36	@ 0x24
+ 8003474:	492d      	ldr	r1, [pc, #180]	@ (800352c <Manage_NRF_Data+0x168>)
+ 8003476:	4618      	mov	r0, r3
+ 8003478:	f004 fb28 	bl	8007acc <siprintf>
+ 800347c:	e003      	b.n	8003486 <Manage_NRF_Data+0xc2>
 	} else {
 		Print_Debug_Data((char*) "INVALID COMMAND RECEIVED \n");
- 8003478:	482c      	ldr	r0, [pc, #176]	@ (800352c <Manage_NRF_Data+0x168>)
- 800347a:	f000 f8b1 	bl	80035e0 <Print_Debug_Data>
- 800347e:	e047      	b.n	8003510 <Manage_NRF_Data+0x14c>
+ 800347e:	482c      	ldr	r0, [pc, #176]	@ (8003530 <Manage_NRF_Data+0x16c>)
+ 8003480:	f000 f8b0 	bl	80035e4 <Print_Debug_Data>
+ 8003484:	e047      	b.n	8003516 <Manage_NRF_Data+0x152>
 		return;
 	}
 	char return_string1[32];
 	memcpy(return_string1, my_node_id, 2);
- 8003480:	4b2b      	ldr	r3, [pc, #172]	@ (8003530 <Manage_NRF_Data+0x16c>)
- 8003482:	881b      	ldrh	r3, [r3, #0]
- 8003484:	80bb      	strh	r3, [r7, #4]
+ 8003486:	4b2b      	ldr	r3, [pc, #172]	@ (8003534 <Manage_NRF_Data+0x170>)
+ 8003488:	881b      	ldrh	r3, [r3, #0]
+ 800348a:	80bb      	strh	r3, [r7, #4]
 	return_string1[2] = rcvd_command;
- 8003486:	f897 3065 	ldrb.w	r3, [r7, #101]	@ 0x65
- 800348a:	71bb      	strb	r3, [r7, #6]
+ 800348c:	f897 3065 	ldrb.w	r3, [r7, #101]	@ 0x65
+ 8003490:	71bb      	strb	r3, [r7, #6]
 	return_string1[3] = return_data[0];
- 800348c:	f897 3024 	ldrb.w	r3, [r7, #36]	@ 0x24
- 8003490:	71fb      	strb	r3, [r7, #7]
+ 8003492:	f897 3024 	ldrb.w	r3, [r7, #36]	@ 0x24
+ 8003496:	71fb      	strb	r3, [r7, #7]
 	return_string1[4] = return_data[1];
- 8003492:	f897 3025 	ldrb.w	r3, [r7, #37]	@ 0x25
- 8003496:	723b      	strb	r3, [r7, #8]
+ 8003498:	f897 3025 	ldrb.w	r3, [r7, #37]	@ 0x25
+ 800349c:	723b      	strb	r3, [r7, #8]
 	return_string1[5] = return_data[2];
- 8003498:	f897 3026 	ldrb.w	r3, [r7, #38]	@ 0x26
- 800349c:	727b      	strb	r3, [r7, #9]
+ 800349e:	f897 3026 	ldrb.w	r3, [r7, #38]	@ 0x26
+ 80034a2:	727b      	strb	r3, [r7, #9]
 	return_string1[6] = return_data[3];
- 800349e:	f897 3027 	ldrb.w	r3, [r7, #39]	@ 0x27
- 80034a2:	72bb      	strb	r3, [r7, #10]
+ 80034a4:	f897 3027 	ldrb.w	r3, [r7, #39]	@ 0x27
+ 80034a8:	72bb      	strb	r3, [r7, #10]
 
 //If it is getting PPM, data will be 4 digit
 	if (rcvd_command == get_CO2) {
- 80034a4:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
- 80034a8:	f897 3062 	ldrb.w	r3, [r7, #98]	@ 0x62
- 80034ac:	429a      	cmp	r2, r3
- 80034ae:	d103      	bne.n	80034b8 <Manage_NRF_Data+0xf4>
+ 80034aa:	f897 2065 	ldrb.w	r2, [r7, #101]	@ 0x65
+ 80034ae:	f897 3062 	ldrb.w	r3, [r7, #98]	@ 0x62
+ 80034b2:	429a      	cmp	r2, r3
+ 80034b4:	d103      	bne.n	80034be <Manage_NRF_Data+0xfa>
 		temp = 7;
- 80034b0:	2307      	movs	r3, #7
- 80034b2:	f887 3067 	strb.w	r3, [r7, #103]	@ 0x67
- 80034b6:	e002      	b.n	80034be <Manage_NRF_Data+0xfa>
+ 80034b6:	2307      	movs	r3, #7
+ 80034b8:	f887 3067 	strb.w	r3, [r7, #103]	@ 0x67
+ 80034bc:	e002      	b.n	80034c4 <Manage_NRF_Data+0x100>
 	} else {
 		temp = 5;
- 80034b8:	2305      	movs	r3, #5
- 80034ba:	f887 3067 	strb.w	r3, [r7, #103]	@ 0x67
+ 80034be:	2305      	movs	r3, #5
+ 80034c0:	f887 3067 	strb.w	r3, [r7, #103]	@ 0x67
 	}
 
 	for (uint8_t i = temp; i < 32; i++) {
- 80034be:	f897 3067 	ldrb.w	r3, [r7, #103]	@ 0x67
- 80034c2:	f887 3066 	strb.w	r3, [r7, #102]	@ 0x66
- 80034c6:	e00b      	b.n	80034e0 <Manage_NRF_Data+0x11c>
+ 80034c4:	f897 3067 	ldrb.w	r3, [r7, #103]	@ 0x67
+ 80034c8:	f887 3066 	strb.w	r3, [r7, #102]	@ 0x66
+ 80034cc:	e00b      	b.n	80034e6 <Manage_NRF_Data+0x122>
 		return_string1[i] = '\0';
- 80034c8:	f897 3066 	ldrb.w	r3, [r7, #102]	@ 0x66
- 80034cc:	3368      	adds	r3, #104	@ 0x68
- 80034ce:	443b      	add	r3, r7
- 80034d0:	2200      	movs	r2, #0
- 80034d2:	f803 2c64 	strb.w	r2, [r3, #-100]
+ 80034ce:	f897 3066 	ldrb.w	r3, [r7, #102]	@ 0x66
+ 80034d2:	3368      	adds	r3, #104	@ 0x68
+ 80034d4:	443b      	add	r3, r7
+ 80034d6:	2200      	movs	r2, #0
+ 80034d8:	f803 2c64 	strb.w	r2, [r3, #-100]
 	for (uint8_t i = temp; i < 32; i++) {
- 80034d6:	f897 3066 	ldrb.w	r3, [r7, #102]	@ 0x66
- 80034da:	3301      	adds	r3, #1
- 80034dc:	f887 3066 	strb.w	r3, [r7, #102]	@ 0x66
- 80034e0:	f897 3066 	ldrb.w	r3, [r7, #102]	@ 0x66
- 80034e4:	2b1f      	cmp	r3, #31
- 80034e6:	d9ef      	bls.n	80034c8 <Manage_NRF_Data+0x104>
+ 80034dc:	f897 3066 	ldrb.w	r3, [r7, #102]	@ 0x66
+ 80034e0:	3301      	adds	r3, #1
+ 80034e2:	f887 3066 	strb.w	r3, [r7, #102]	@ 0x66
+ 80034e6:	f897 3066 	ldrb.w	r3, [r7, #102]	@ 0x66
+ 80034ea:	2b1f      	cmp	r3, #31
+ 80034ec:	d9ef      	bls.n	80034ce <Manage_NRF_Data+0x10a>
 	}
 
 	HAL_UART_Transmit(&huart1, (uint8_t*) "\nReturning data ::> ",
- 80034e8:	230a      	movs	r3, #10
- 80034ea:	2214      	movs	r2, #20
- 80034ec:	4911      	ldr	r1, [pc, #68]	@ (8003534 <Manage_NRF_Data+0x170>)
- 80034ee:	4812      	ldr	r0, [pc, #72]	@ (8003538 <Manage_NRF_Data+0x174>)
- 80034f0:	f002 fd96 	bl	8006020 <HAL_UART_Transmit>
+ 80034ee:	230a      	movs	r3, #10
+ 80034f0:	2214      	movs	r2, #20
+ 80034f2:	4911      	ldr	r1, [pc, #68]	@ (8003538 <Manage_NRF_Data+0x174>)
+ 80034f4:	4811      	ldr	r0, [pc, #68]	@ (800353c <Manage_NRF_Data+0x178>)
+ 80034f6:	f002 fd93 	bl	8006020 <HAL_UART_Transmit>
 			strlen("\nReturning data ::> "), 10);
 	HAL_UART_Transmit(&huart1, (uint8_t*) return_string1, 7, 10);
- 80034f4:	1d39      	adds	r1, r7, #4
- 80034f6:	230a      	movs	r3, #10
- 80034f8:	2207      	movs	r2, #7
- 80034fa:	480f      	ldr	r0, [pc, #60]	@ (8003538 <Manage_NRF_Data+0x174>)
- 80034fc:	f002 fd90 	bl	8006020 <HAL_UART_Transmit>
+ 80034fa:	1d39      	adds	r1, r7, #4
+ 80034fc:	230a      	movs	r3, #10
+ 80034fe:	2207      	movs	r2, #7
+ 8003500:	480e      	ldr	r0, [pc, #56]	@ (800353c <Manage_NRF_Data+0x178>)
+ 8003502:	f002 fd8d 	bl	8006020 <HAL_UART_Transmit>
 	Switch_to_Transmitt_mode();
- 8003500:	f7ff fc06 	bl	8002d10 <Switch_to_Transmitt_mode>
+ 8003506:	f7ff fc03 	bl	8002d10 <Switch_to_Transmitt_mode>
 	Transmitt_reply_to_gateway(return_string1);
- 8003504:	1d3b      	adds	r3, r7, #4
- 8003506:	4618      	mov	r0, r3
- 8003508:	f000 f818 	bl	800353c <Transmitt_reply_to_gateway>
+ 800350a:	1d3b      	adds	r3, r7, #4
+ 800350c:	4618      	mov	r0, r3
+ 800350e:	f000 f817 	bl	8003540 <Transmitt_reply_to_gateway>
 	Switch_to_Receiver_mode();
- 800350c:	f7ff fc16 	bl	8002d3c <Switch_to_Receiver_mode>
+ 8003512:	f7ff fc13 	bl	8002d3c <Switch_to_Receiver_mode>
 }
- 8003510:	3768      	adds	r7, #104	@ 0x68
- 8003512:	46bd      	mov	sp, r7
- 8003514:	bd80      	pop	{r7, pc}
- 8003516:	bf00      	nop
- 8003518:	2000020c 	.word	0x2000020c
- 800351c:	0800b8b0 	.word	0x0800b8b0
- 8003520:	20000214 	.word	0x20000214
- 8003524:	200001f8 	.word	0x200001f8
- 8003528:	0800b8b4 	.word	0x0800b8b4
- 800352c:	0800b8b8 	.word	0x0800b8b8
- 8003530:	20000450 	.word	0x20000450
- 8003534:	0800b8d4 	.word	0x0800b8d4
- 8003538:	200003c0 	.word	0x200003c0
+ 8003516:	3768      	adds	r7, #104	@ 0x68
+ 8003518:	46bd      	mov	sp, r7
+ 800351a:	bd80      	pop	{r7, pc}
+ 800351c:	2000020c 	.word	0x2000020c
+ 8003520:	0800b8b0 	.word	0x0800b8b0
+ 8003524:	20000214 	.word	0x20000214
+ 8003528:	200001f8 	.word	0x200001f8
+ 800352c:	0800b8b4 	.word	0x0800b8b4
+ 8003530:	0800b8b8 	.word	0x0800b8b8
+ 8003534:	20000450 	.word	0x20000450
+ 8003538:	0800b8d4 	.word	0x0800b8d4
+ 800353c:	200003c0 	.word	0x200003c0
 
-0800353c <Transmitt_reply_to_gateway>:
+08003540 <Transmitt_reply_to_gateway>:
 void Transmitt_reply_to_gateway(char *msg) {
- 800353c:	b580      	push	{r7, lr}
- 800353e:	b08e      	sub	sp, #56	@ 0x38
- 8003540:	af00      	add	r7, sp, #0
- 8003542:	6078      	str	r0, [r7, #4]
+ 8003540:	b580      	push	{r7, lr}
+ 8003542:	b08e      	sub	sp, #56	@ 0x38
+ 8003544:	af00      	add	r7, sp, #0
+ 8003546:	6078      	str	r0, [r7, #4]
 	HAL_UART_Transmit(&huart1,
- 8003544:	230a      	movs	r3, #10
- 8003546:	2231      	movs	r2, #49	@ 0x31
- 8003548:	4920      	ldr	r1, [pc, #128]	@ (80035cc <Transmitt_reply_to_gateway+0x90>)
- 800354a:	4821      	ldr	r0, [pc, #132]	@ (80035d0 <Transmitt_reply_to_gateway+0x94>)
- 800354c:	f002 fd68 	bl	8006020 <HAL_UART_Transmit>
+ 8003548:	230a      	movs	r3, #10
+ 800354a:	2231      	movs	r2, #49	@ 0x31
+ 800354c:	4920      	ldr	r1, [pc, #128]	@ (80035d0 <Transmitt_reply_to_gateway+0x90>)
+ 800354e:	4821      	ldr	r0, [pc, #132]	@ (80035d4 <Transmitt_reply_to_gateway+0x94>)
+ 8003550:	f002 fd66 	bl	8006020 <HAL_UART_Transmit>
 			(uint8_t*) "\nTransmitting reply to gateway .. waiting for ack",
 			strlen("\nTransmitting reply to gateway .. waiting for ack"), 10);
 	char received_data_from_srvr1[40];
 	memcpy(received_data_from_srvr1, msg, 32);
- 8003550:	f107 030c 	add.w	r3, r7, #12
- 8003554:	2220      	movs	r2, #32
- 8003556:	6879      	ldr	r1, [r7, #4]
- 8003558:	4618      	mov	r0, r3
- 800355a:	f004 fbba 	bl	8007cd2 <memcpy>
+ 8003554:	f107 030c 	add.w	r3, r7, #12
+ 8003558:	2220      	movs	r2, #32
+ 800355a:	6879      	ldr	r1, [r7, #4]
+ 800355c:	4618      	mov	r0, r3
+ 800355e:	f004 fbb8 	bl	8007cd2 <memcpy>
 	for (int i = 0; i <= 10; i++) {
- 800355e:	2300      	movs	r3, #0
- 8003560:	637b      	str	r3, [r7, #52]	@ 0x34
- 8003562:	e026      	b.n	80035b2 <Transmitt_reply_to_gateway+0x76>
+ 8003562:	2300      	movs	r3, #0
+ 8003564:	637b      	str	r3, [r7, #52]	@ 0x34
+ 8003566:	e026      	b.n	80035b6 <Transmitt_reply_to_gateway+0x76>
 		if (!NRF24_write(received_data_from_srvr1, 32)) {
- 8003564:	f107 030c 	add.w	r3, r7, #12
- 8003568:	2120      	movs	r1, #32
- 800356a:	4618      	mov	r0, r3
- 800356c:	f7fe fa42 	bl	80019f4 <NRF24_write>
- 8003570:	4603      	mov	r3, r0
- 8003572:	f083 0301 	eor.w	r3, r3, #1
- 8003576:	b2db      	uxtb	r3, r3
- 8003578:	2b00      	cmp	r3, #0
- 800357a:	d010      	beq.n	800359e <Transmitt_reply_to_gateway+0x62>
+ 8003568:	f107 030c 	add.w	r3, r7, #12
+ 800356c:	2120      	movs	r1, #32
+ 800356e:	4618      	mov	r0, r3
+ 8003570:	f7fe fa40 	bl	80019f4 <NRF24_write>
+ 8003574:	4603      	mov	r3, r0
+ 8003576:	f083 0301 	eor.w	r3, r3, #1
+ 800357a:	b2db      	uxtb	r3, r3
+ 800357c:	2b00      	cmp	r3, #0
+ 800357e:	d010      	beq.n	80035a2 <Transmitt_reply_to_gateway+0x62>
 			NRF24_write(received_data_from_srvr1, 32);
- 800357c:	f107 030c 	add.w	r3, r7, #12
- 8003580:	2120      	movs	r1, #32
- 8003582:	4618      	mov	r0, r3
- 8003584:	f7fe fa36 	bl	80019f4 <NRF24_write>
+ 8003580:	f107 030c 	add.w	r3, r7, #12
+ 8003584:	2120      	movs	r1, #32
+ 8003586:	4618      	mov	r0, r3
+ 8003588:	f7fe fa34 	bl	80019f4 <NRF24_write>
 			HAL_UART_Transmit(&huart1, (uint8_t*) ".", strlen("."), 10);
- 8003588:	230a      	movs	r3, #10
- 800358a:	2201      	movs	r2, #1
- 800358c:	4911      	ldr	r1, [pc, #68]	@ (80035d4 <Transmitt_reply_to_gateway+0x98>)
- 800358e:	4810      	ldr	r0, [pc, #64]	@ (80035d0 <Transmitt_reply_to_gateway+0x94>)
- 8003590:	f002 fd46 	bl	8006020 <HAL_UART_Transmit>
+ 800358c:	230a      	movs	r3, #10
+ 800358e:	2201      	movs	r2, #1
+ 8003590:	4911      	ldr	r1, [pc, #68]	@ (80035d8 <Transmitt_reply_to_gateway+0x98>)
+ 8003592:	4810      	ldr	r0, [pc, #64]	@ (80035d4 <Transmitt_reply_to_gateway+0x94>)
+ 8003594:	f002 fd44 	bl	8006020 <HAL_UART_Transmit>
 			HAL_Delay(400);
- 8003594:	f44f 70c8 	mov.w	r0, #400	@ 0x190
- 8003598:	f000 faf2 	bl	8003b80 <HAL_Delay>
- 800359c:	e006      	b.n	80035ac <Transmitt_reply_to_gateway+0x70>
+ 8003598:	f44f 70c8 	mov.w	r0, #400	@ 0x190
+ 800359c:	f000 faf0 	bl	8003b80 <HAL_Delay>
+ 80035a0:	e006      	b.n	80035b0 <Transmitt_reply_to_gateway+0x70>
 		} else {
 			HAL_UART_Transmit(&huart1,
- 800359e:	230a      	movs	r3, #10
- 80035a0:	222a      	movs	r2, #42	@ 0x2a
- 80035a2:	490d      	ldr	r1, [pc, #52]	@ (80035d8 <Transmitt_reply_to_gateway+0x9c>)
- 80035a4:	480a      	ldr	r0, [pc, #40]	@ (80035d0 <Transmitt_reply_to_gateway+0x94>)
- 80035a6:	f002 fd3b 	bl	8006020 <HAL_UART_Transmit>
+ 80035a2:	230a      	movs	r3, #10
+ 80035a4:	222a      	movs	r2, #42	@ 0x2a
+ 80035a6:	490d      	ldr	r1, [pc, #52]	@ (80035dc <Transmitt_reply_to_gateway+0x9c>)
+ 80035a8:	480a      	ldr	r0, [pc, #40]	@ (80035d4 <Transmitt_reply_to_gateway+0x94>)
+ 80035aa:	f002 fd39 	bl	8006020 <HAL_UART_Transmit>
 					(uint8_t*) "\nReply Transmitted to gateway successfully",
 					strlen("\nReply Transmitted to gateway successfully"), 10);
 			break;
- 80035aa:	e005      	b.n	80035b8 <Transmitt_reply_to_gateway+0x7c>
+ 80035ae:	e005      	b.n	80035bc <Transmitt_reply_to_gateway+0x7c>
 	for (int i = 0; i <= 10; i++) {
- 80035ac:	6b7b      	ldr	r3, [r7, #52]	@ 0x34
- 80035ae:	3301      	adds	r3, #1
- 80035b0:	637b      	str	r3, [r7, #52]	@ 0x34
- 80035b2:	6b7b      	ldr	r3, [r7, #52]	@ 0x34
- 80035b4:	2b0a      	cmp	r3, #10
- 80035b6:	ddd5      	ble.n	8003564 <Transmitt_reply_to_gateway+0x28>
+ 80035b0:	6b7b      	ldr	r3, [r7, #52]	@ 0x34
+ 80035b2:	3301      	adds	r3, #1
+ 80035b4:	637b      	str	r3, [r7, #52]	@ 0x34
+ 80035b6:	6b7b      	ldr	r3, [r7, #52]	@ 0x34
+ 80035b8:	2b0a      	cmp	r3, #10
+ 80035ba:	ddd5      	ble.n	8003568 <Transmitt_reply_to_gateway+0x28>
 		}
 	}
 	HAL_UART_Transmit(&huart1,
- 80035b8:	230a      	movs	r3, #10
- 80035ba:	2231      	movs	r2, #49	@ 0x31
- 80035bc:	4907      	ldr	r1, [pc, #28]	@ (80035dc <Transmitt_reply_to_gateway+0xa0>)
- 80035be:	4804      	ldr	r0, [pc, #16]	@ (80035d0 <Transmitt_reply_to_gateway+0x94>)
- 80035c0:	f002 fd2e 	bl	8006020 <HAL_UART_Transmit>
+ 80035bc:	230a      	movs	r3, #10
+ 80035be:	2231      	movs	r2, #49	@ 0x31
+ 80035c0:	4907      	ldr	r1, [pc, #28]	@ (80035e0 <Transmitt_reply_to_gateway+0xa0>)
+ 80035c2:	4804      	ldr	r0, [pc, #16]	@ (80035d4 <Transmitt_reply_to_gateway+0x94>)
+ 80035c4:	f002 fd2c 	bl	8006020 <HAL_UART_Transmit>
 			(uint8_t*) "\nTransmission Failed, No acknowledgement received",
 			strlen("\nTransmission Failed, No acknowledgement received"), 10);
 
 }
- 80035c4:	bf00      	nop
- 80035c6:	3738      	adds	r7, #56	@ 0x38
- 80035c8:	46bd      	mov	sp, r7
- 80035ca:	bd80      	pop	{r7, pc}
- 80035cc:	0800b8ec 	.word	0x0800b8ec
- 80035d0:	200003c0 	.word	0x200003c0
- 80035d4:	0800b920 	.word	0x0800b920
- 80035d8:	0800b924 	.word	0x0800b924
- 80035dc:	0800b950 	.word	0x0800b950
+ 80035c8:	bf00      	nop
+ 80035ca:	3738      	adds	r7, #56	@ 0x38
+ 80035cc:	46bd      	mov	sp, r7
+ 80035ce:	bd80      	pop	{r7, pc}
+ 80035d0:	0800b8ec 	.word	0x0800b8ec
+ 80035d4:	200003c0 	.word	0x200003c0
+ 80035d8:	0800b920 	.word	0x0800b920
+ 80035dc:	0800b924 	.word	0x0800b924
+ 80035e0:	0800b950 	.word	0x0800b950
 
-080035e0 <Print_Debug_Data>:
+080035e4 <Print_Debug_Data>:
 
 void Print_Debug_Data(char *Debug_Msg) {
- 80035e0:	b580      	push	{r7, lr}
- 80035e2:	b082      	sub	sp, #8
- 80035e4:	af00      	add	r7, sp, #0
- 80035e6:	6078      	str	r0, [r7, #4]
+ 80035e4:	b580      	push	{r7, lr}
+ 80035e6:	b082      	sub	sp, #8
+ 80035e8:	af00      	add	r7, sp, #0
+ 80035ea:	6078      	str	r0, [r7, #4]
 	HAL_UART_Transmit(&huart1, (const uint8_t*) Debug_Msg, strlen(Debug_Msg),
- 80035e8:	6878      	ldr	r0, [r7, #4]
- 80035ea:	f7fc fdb1 	bl	8000150 <strlen>
- 80035ee:	4603      	mov	r3, r0
- 80035f0:	b29a      	uxth	r2, r3
- 80035f2:	23c8      	movs	r3, #200	@ 0xc8
- 80035f4:	6879      	ldr	r1, [r7, #4]
- 80035f6:	4803      	ldr	r0, [pc, #12]	@ (8003604 <Print_Debug_Data+0x24>)
- 80035f8:	f002 fd12 	bl	8006020 <HAL_UART_Transmit>
+ 80035ec:	6878      	ldr	r0, [r7, #4]
+ 80035ee:	f7fc fdaf 	bl	8000150 <strlen>
+ 80035f2:	4603      	mov	r3, r0
+ 80035f4:	b29a      	uxth	r2, r3
+ 80035f6:	23c8      	movs	r3, #200	@ 0xc8
+ 80035f8:	6879      	ldr	r1, [r7, #4]
+ 80035fa:	4803      	ldr	r0, [pc, #12]	@ (8003608 <Print_Debug_Data+0x24>)
+ 80035fc:	f002 fd10 	bl	8006020 <HAL_UART_Transmit>
 			200);
 }
- 80035fc:	bf00      	nop
- 80035fe:	3708      	adds	r7, #8
- 8003600:	46bd      	mov	sp, r7
- 8003602:	bd80      	pop	{r7, pc}
- 8003604:	200003c0 	.word	0x200003c0
+ 8003600:	bf00      	nop
+ 8003602:	3708      	adds	r7, #8
+ 8003604:	46bd      	mov	sp, r7
+ 8003606:	bd80      	pop	{r7, pc}
+ 8003608:	200003c0 	.word	0x200003c0
 
-08003608 <Manage_Received_Data_From_UART>:
+0800360c <Manage_Received_Data_From_UART>:
 void Manage_Received_Data_From_UART(uint8_t UART_DATA[], size_t data_length) {
- 8003608:	b580      	push	{r7, lr}
- 800360a:	b08a      	sub	sp, #40	@ 0x28
- 800360c:	af00      	add	r7, sp, #0
- 800360e:	6078      	str	r0, [r7, #4]
- 8003610:	6039      	str	r1, [r7, #0]
+ 800360c:	b580      	push	{r7, lr}
+ 800360e:	b08a      	sub	sp, #40	@ 0x28
+ 8003610:	af00      	add	r7, sp, #0
+ 8003612:	6078      	str	r0, [r7, #4]
+ 8003614:	6039      	str	r1, [r7, #0]
 // Check if the first element is '*'
 	if (data_length > 0 && UART_DATA[0] == '*') {
- 8003612:	683b      	ldr	r3, [r7, #0]
- 8003614:	2b00      	cmp	r3, #0
- 8003616:	f000 80c0 	beq.w	800379a <Manage_Received_Data_From_UART+0x192>
- 800361a:	687b      	ldr	r3, [r7, #4]
- 800361c:	781b      	ldrb	r3, [r3, #0]
- 800361e:	2b2a      	cmp	r3, #42	@ 0x2a
- 8003620:	f040 80bb 	bne.w	800379a <Manage_Received_Data_From_UART+0x192>
+ 8003616:	683b      	ldr	r3, [r7, #0]
+ 8003618:	2b00      	cmp	r3, #0
+ 800361a:	f000 80c0 	beq.w	800379e <Manage_Received_Data_From_UART+0x192>
+ 800361e:	687b      	ldr	r3, [r7, #4]
+ 8003620:	781b      	ldrb	r3, [r3, #0]
+ 8003622:	2b2a      	cmp	r3, #42	@ 0x2a
+ 8003624:	f040 80bb 	bne.w	800379e <Manage_Received_Data_From_UART+0x192>
 
 //IF THE COMAMND IS TO ERASE FDLASH [It will erase the next three page, which contain the data ]
 		if (strncmp((char*) &UART_DATA[1], "ERASE_NRF_DATA", 14) == 0) {
- 8003624:	687b      	ldr	r3, [r7, #4]
- 8003626:	3301      	adds	r3, #1
- 8003628:	220e      	movs	r2, #14
- 800362a:	495e      	ldr	r1, [pc, #376]	@ (80037a4 <Manage_Received_Data_From_UART+0x19c>)
- 800362c:	4618      	mov	r0, r3
- 800362e:	f004 fab8 	bl	8007ba2 <strncmp>
- 8003632:	4603      	mov	r3, r0
- 8003634:	2b00      	cmp	r3, #0
- 8003636:	d114      	bne.n	8003662 <Manage_Received_Data_From_UART+0x5a>
+ 8003628:	687b      	ldr	r3, [r7, #4]
+ 800362a:	3301      	adds	r3, #1
+ 800362c:	220e      	movs	r2, #14
+ 800362e:	495e      	ldr	r1, [pc, #376]	@ (80037a8 <Manage_Received_Data_From_UART+0x19c>)
+ 8003630:	4618      	mov	r0, r3
+ 8003632:	f004 fab6 	bl	8007ba2 <strncmp>
+ 8003636:	4603      	mov	r3, r0
+ 8003638:	2b00      	cmp	r3, #0
+ 800363a:	d114      	bne.n	8003666 <Manage_Received_Data_From_UART+0x5a>
 			//Erase FLASH_ADDR_4_No_Of_Polling_Node
 			bool status = ee_format_page(FLASH_ADDR_START_PG_29_USER_VAR, 4);
- 8003638:	2104      	movs	r1, #4
- 800363a:	485b      	ldr	r0, [pc, #364]	@ (80037a8 <Manage_Received_Data_From_UART+0x1a0>)
- 800363c:	f7ff f944 	bl	80028c8 <ee_format_page>
- 8003640:	4603      	mov	r3, r0
- 8003642:	f887 3027 	strb.w	r3, [r7, #39]	@ 0x27
+ 800363c:	2104      	movs	r1, #4
+ 800363e:	485b      	ldr	r0, [pc, #364]	@ (80037ac <Manage_Received_Data_From_UART+0x1a0>)
+ 8003640:	f7ff f942 	bl	80028c8 <ee_format_page>
+ 8003644:	4603      	mov	r3, r0
+ 8003646:	f887 3027 	strb.w	r3, [r7, #39]	@ 0x27
 			if (!status) {
- 8003646:	f897 3027 	ldrb.w	r3, [r7, #39]	@ 0x27
- 800364a:	f083 0301 	eor.w	r3, r3, #1
- 800364e:	b2db      	uxtb	r3, r3
- 8003650:	2b00      	cmp	r3, #0
- 8003652:	d003      	beq.n	800365c <Manage_Received_Data_From_UART+0x54>
+ 800364a:	f897 3027 	ldrb.w	r3, [r7, #39]	@ 0x27
+ 800364e:	f083 0301 	eor.w	r3, r3, #1
+ 8003652:	b2db      	uxtb	r3, r3
+ 8003654:	2b00      	cmp	r3, #0
+ 8003656:	d003      	beq.n	8003660 <Manage_Received_Data_From_UART+0x54>
 				Print_Debug_Data(
- 8003654:	4855      	ldr	r0, [pc, #340]	@ (80037ac <Manage_Received_Data_From_UART+0x1a4>)
- 8003656:	f7ff ffc3 	bl	80035e0 <Print_Debug_Data>
- 800365a:	e002      	b.n	8003662 <Manage_Received_Data_From_UART+0x5a>
+ 8003658:	4855      	ldr	r0, [pc, #340]	@ (80037b0 <Manage_Received_Data_From_UART+0x1a4>)
+ 800365a:	f7ff ffc3 	bl	80035e4 <Print_Debug_Data>
+ 800365e:	e002      	b.n	8003666 <Manage_Received_Data_From_UART+0x5a>
 						(char*) "[ERASE FLASH ERROR] UNABLE TO ERASE \n");
 			} else {
 				Print_Debug_Data(
- 800365c:	4854      	ldr	r0, [pc, #336]	@ (80037b0 <Manage_Received_Data_From_UART+0x1a8>)
- 800365e:	f7ff ffbf 	bl	80035e0 <Print_Debug_Data>
+ 8003660:	4854      	ldr	r0, [pc, #336]	@ (80037b4 <Manage_Received_Data_From_UART+0x1a8>)
+ 8003662:	f7ff ffbf 	bl	80035e4 <Print_Debug_Data>
 						(char*) "[ERASE FLASH ] FLASH ERASED SUCCESFULLY \n");
 			}
 		}
 
 //IF THE COMAMND IS TO STORE NRF CHANNEL
 		if (strncmp((char*) &UART_DATA[1], "NRF_CH:", 7) == 0) {
- 8003662:	687b      	ldr	r3, [r7, #4]
- 8003664:	3301      	adds	r3, #1
- 8003666:	2207      	movs	r2, #7
- 8003668:	4952      	ldr	r1, [pc, #328]	@ (80037b4 <Manage_Received_Data_From_UART+0x1ac>)
- 800366a:	4618      	mov	r0, r3
- 800366c:	f004 fa99 	bl	8007ba2 <strncmp>
- 8003670:	4603      	mov	r3, r0
- 8003672:	2b00      	cmp	r3, #0
- 8003674:	d12d      	bne.n	80036d2 <Manage_Received_Data_From_UART+0xca>
+ 8003666:	687b      	ldr	r3, [r7, #4]
+ 8003668:	3301      	adds	r3, #1
+ 800366a:	2207      	movs	r2, #7
+ 800366c:	4952      	ldr	r1, [pc, #328]	@ (80037b8 <Manage_Received_Data_From_UART+0x1ac>)
+ 800366e:	4618      	mov	r0, r3
+ 8003670:	f004 fa97 	bl	8007ba2 <strncmp>
+ 8003674:	4603      	mov	r3, r0
+ 8003676:	2b00      	cmp	r3, #0
+ 8003678:	d12d      	bne.n	80036d6 <Manage_Received_Data_From_UART+0xca>
 			//if the condition meet, then the next two byte is the channel
 			uint8_t nrfChannel[2];
 			nrfChannel[0] = UART_DATA[8];
- 8003676:	687b      	ldr	r3, [r7, #4]
- 8003678:	7a1b      	ldrb	r3, [r3, #8]
- 800367a:	733b      	strb	r3, [r7, #12]
+ 800367a:	687b      	ldr	r3, [r7, #4]
+ 800367c:	7a1b      	ldrb	r3, [r3, #8]
+ 800367e:	733b      	strb	r3, [r7, #12]
 			nrfChannel[1] = UART_DATA[9];
- 800367c:	687b      	ldr	r3, [r7, #4]
- 800367e:	7a5b      	ldrb	r3, [r3, #9]
- 8003680:	737b      	strb	r3, [r7, #13]
+ 8003680:	687b      	ldr	r3, [r7, #4]
+ 8003682:	7a5b      	ldrb	r3, [r3, #9]
+ 8003684:	737b      	strb	r3, [r7, #13]
 			// Convert ASCII characters to numeric values
 			uint8_t highValue = nrfChannel[0] - '0';
- 8003682:	7b3b      	ldrb	r3, [r7, #12]
- 8003684:	3b30      	subs	r3, #48	@ 0x30
- 8003686:	f887 3026 	strb.w	r3, [r7, #38]	@ 0x26
+ 8003686:	7b3b      	ldrb	r3, [r7, #12]
+ 8003688:	3b30      	subs	r3, #48	@ 0x30
+ 800368a:	f887 3026 	strb.w	r3, [r7, #38]	@ 0x26
 			uint8_t lowValue = nrfChannel[1] - '0';
- 800368a:	7b7b      	ldrb	r3, [r7, #13]
- 800368c:	3b30      	subs	r3, #48	@ 0x30
- 800368e:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
+ 800368e:	7b7b      	ldrb	r3, [r7, #13]
+ 8003690:	3b30      	subs	r3, #48	@ 0x30
+ 8003692:	f887 3025 	strb.w	r3, [r7, #37]	@ 0x25
 			// Combine the digits into a single uint8_t
 			uint8_t nrfChannel_8_t = (highValue * 10) + lowValue;
- 8003692:	f897 3026 	ldrb.w	r3, [r7, #38]	@ 0x26
- 8003696:	461a      	mov	r2, r3
- 8003698:	0092      	lsls	r2, r2, #2
- 800369a:	4413      	add	r3, r2
- 800369c:	005b      	lsls	r3, r3, #1
- 800369e:	b2da      	uxtb	r2, r3
- 80036a0:	f897 3025 	ldrb.w	r3, [r7, #37]	@ 0x25
- 80036a4:	4413      	add	r3, r2
- 80036a6:	f887 3024 	strb.w	r3, [r7, #36]	@ 0x24
+ 8003696:	f897 3026 	ldrb.w	r3, [r7, #38]	@ 0x26
+ 800369a:	461a      	mov	r2, r3
+ 800369c:	0092      	lsls	r2, r2, #2
+ 800369e:	4413      	add	r3, r2
+ 80036a0:	005b      	lsls	r3, r3, #1
+ 80036a2:	b2da      	uxtb	r2, r3
+ 80036a4:	f897 3025 	ldrb.w	r3, [r7, #37]	@ 0x25
+ 80036a8:	4413      	add	r3, r2
+ 80036aa:	f887 3024 	strb.w	r3, [r7, #36]	@ 0x24
 			if (!ee_write_16(FLASH_ADDR_4_Self_Channel, nrfChannel_8_t)) {
- 80036aa:	f897 3024 	ldrb.w	r3, [r7, #36]	@ 0x24
- 80036ae:	b29b      	uxth	r3, r3
- 80036b0:	4619      	mov	r1, r3
- 80036b2:	4841      	ldr	r0, [pc, #260]	@ (80037b8 <Manage_Received_Data_From_UART+0x1b0>)
- 80036b4:	f7ff f8a0 	bl	80027f8 <ee_write_16>
- 80036b8:	4603      	mov	r3, r0
- 80036ba:	f083 0301 	eor.w	r3, r3, #1
- 80036be:	b2db      	uxtb	r3, r3
- 80036c0:	2b00      	cmp	r3, #0
- 80036c2:	d003      	beq.n	80036cc <Manage_Received_Data_From_UART+0xc4>
+ 80036ae:	f897 3024 	ldrb.w	r3, [r7, #36]	@ 0x24
+ 80036b2:	b29b      	uxth	r3, r3
+ 80036b4:	4619      	mov	r1, r3
+ 80036b6:	4841      	ldr	r0, [pc, #260]	@ (80037bc <Manage_Received_Data_From_UART+0x1b0>)
+ 80036b8:	f7ff f89e 	bl	80027f8 <ee_write_16>
+ 80036bc:	4603      	mov	r3, r0
+ 80036be:	f083 0301 	eor.w	r3, r3, #1
+ 80036c2:	b2db      	uxtb	r3, r3
+ 80036c4:	2b00      	cmp	r3, #0
+ 80036c6:	d003      	beq.n	80036d0 <Manage_Received_Data_From_UART+0xc4>
 				Print_Debug_Data(
- 80036c4:	483d      	ldr	r0, [pc, #244]	@ (80037bc <Manage_Received_Data_From_UART+0x1b4>)
- 80036c6:	f7ff ff8b 	bl	80035e0 <Print_Debug_Data>
- 80036ca:	e002      	b.n	80036d2 <Manage_Received_Data_From_UART+0xca>
+ 80036c8:	483d      	ldr	r0, [pc, #244]	@ (80037c0 <Manage_Received_Data_From_UART+0x1b4>)
+ 80036ca:	f7ff ff8b 	bl	80035e4 <Print_Debug_Data>
+ 80036ce:	e002      	b.n	80036d6 <Manage_Received_Data_From_UART+0xca>
 						(char*) "[ERROR WRITING FLASH] UNABLE TO WRITE CHANNEL Variable\n");
 			} else {
 				Print_Debug_Data(
- 80036cc:	483c      	ldr	r0, [pc, #240]	@ (80037c0 <Manage_Received_Data_From_UART+0x1b8>)
- 80036ce:	f7ff ff87 	bl	80035e0 <Print_Debug_Data>
+ 80036d0:	483c      	ldr	r0, [pc, #240]	@ (80037c4 <Manage_Received_Data_From_UART+0x1b8>)
+ 80036d2:	f7ff ff87 	bl	80035e4 <Print_Debug_Data>
 						(char*) "[Writing Channel] Channel Written SUCCESFULLY \n");
 			}
 		}
 //IF THE COMAMND IS TO STORE NRF PIPE ADDRESS
 		if (strncmp((char*) &UART_DATA[1], "NRF_PIPE_ADDR:", 14) == 0) {
- 80036d2:	687b      	ldr	r3, [r7, #4]
- 80036d4:	3301      	adds	r3, #1
- 80036d6:	220e      	movs	r2, #14
- 80036d8:	493a      	ldr	r1, [pc, #232]	@ (80037c4 <Manage_Received_Data_From_UART+0x1bc>)
- 80036da:	4618      	mov	r0, r3
- 80036dc:	f004 fa61 	bl	8007ba2 <strncmp>
- 80036e0:	4603      	mov	r3, r0
- 80036e2:	2b00      	cmp	r3, #0
- 80036e4:	d14d      	bne.n	8003782 <Manage_Received_Data_From_UART+0x17a>
+ 80036d6:	687b      	ldr	r3, [r7, #4]
+ 80036d8:	3301      	adds	r3, #1
+ 80036da:	220e      	movs	r2, #14
+ 80036dc:	493a      	ldr	r1, [pc, #232]	@ (80037c8 <Manage_Received_Data_From_UART+0x1bc>)
+ 80036de:	4618      	mov	r0, r3
+ 80036e0:	f004 fa5f 	bl	8007ba2 <strncmp>
+ 80036e4:	4603      	mov	r3, r0
+ 80036e6:	2b00      	cmp	r3, #0
+ 80036e8:	d14d      	bne.n	8003786 <Manage_Received_Data_From_UART+0x17a>
 			// If the condition is met, copy the next two bytes to another array
 			uint8_t PIPE_Addr[2];
 			PIPE_Addr[0] = UART_DATA[15];
- 80036e6:	687b      	ldr	r3, [r7, #4]
- 80036e8:	7bdb      	ldrb	r3, [r3, #15]
- 80036ea:	723b      	strb	r3, [r7, #8]
+ 80036ea:	687b      	ldr	r3, [r7, #4]
+ 80036ec:	7bdb      	ldrb	r3, [r3, #15]
+ 80036ee:	723b      	strb	r3, [r7, #8]
 			PIPE_Addr[1] = UART_DATA[16];
- 80036ec:	687b      	ldr	r3, [r7, #4]
- 80036ee:	7c1b      	ldrb	r3, [r3, #16]
- 80036f0:	727b      	strb	r3, [r7, #9]
+ 80036f0:	687b      	ldr	r3, [r7, #4]
+ 80036f2:	7c1b      	ldrb	r3, [r3, #16]
+ 80036f4:	727b      	strb	r3, [r7, #9]
 			//process the command
 
 			//STORE THE NODE ID, like 01 or 02, which will be required for REPLY
 			uint16_t DEVICE_ADDRESS = (PIPE_Addr[1] << 8) | PIPE_Addr[0];
- 80036f2:	7a7b      	ldrb	r3, [r7, #9]
- 80036f4:	021b      	lsls	r3, r3, #8
- 80036f6:	b21a      	sxth	r2, r3
- 80036f8:	7a3b      	ldrb	r3, [r7, #8]
- 80036fa:	b21b      	sxth	r3, r3
- 80036fc:	4313      	orrs	r3, r2
+ 80036f6:	7a7b      	ldrb	r3, [r7, #9]
+ 80036f8:	021b      	lsls	r3, r3, #8
+ 80036fa:	b21a      	sxth	r2, r3
+ 80036fc:	7a3b      	ldrb	r3, [r7, #8]
  80036fe:	b21b      	sxth	r3, r3
- 8003700:	847b      	strh	r3, [r7, #34]	@ 0x22
+ 8003700:	4313      	orrs	r3, r2
+ 8003702:	b21b      	sxth	r3, r3
+ 8003704:	847b      	strh	r3, [r7, #34]	@ 0x22
 			if (!ee_write_16(FLASH_ADDR_4_DEVICE_ID, DEVICE_ADDRESS)) {
- 8003702:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
- 8003704:	4619      	mov	r1, r3
- 8003706:	4830      	ldr	r0, [pc, #192]	@ (80037c8 <Manage_Received_Data_From_UART+0x1c0>)
- 8003708:	f7ff f876 	bl	80027f8 <ee_write_16>
- 800370c:	4603      	mov	r3, r0
- 800370e:	f083 0301 	eor.w	r3, r3, #1
- 8003712:	b2db      	uxtb	r3, r3
- 8003714:	2b00      	cmp	r3, #0
- 8003716:	d003      	beq.n	8003720 <Manage_Received_Data_From_UART+0x118>
+ 8003706:	8c7b      	ldrh	r3, [r7, #34]	@ 0x22
+ 8003708:	4619      	mov	r1, r3
+ 800370a:	4830      	ldr	r0, [pc, #192]	@ (80037cc <Manage_Received_Data_From_UART+0x1c0>)
+ 800370c:	f7ff f874 	bl	80027f8 <ee_write_16>
+ 8003710:	4603      	mov	r3, r0
+ 8003712:	f083 0301 	eor.w	r3, r3, #1
+ 8003716:	b2db      	uxtb	r3, r3
+ 8003718:	2b00      	cmp	r3, #0
+ 800371a:	d003      	beq.n	8003724 <Manage_Received_Data_From_UART+0x118>
 				Print_Debug_Data(
- 8003718:	482c      	ldr	r0, [pc, #176]	@ (80037cc <Manage_Received_Data_From_UART+0x1c4>)
- 800371a:	f7ff ff61 	bl	80035e0 <Print_Debug_Data>
- 800371e:	e002      	b.n	8003726 <Manage_Received_Data_From_UART+0x11e>
+ 800371c:	482c      	ldr	r0, [pc, #176]	@ (80037d0 <Manage_Received_Data_From_UART+0x1c4>)
+ 800371e:	f7ff ff61 	bl	80035e4 <Print_Debug_Data>
+ 8003722:	e002      	b.n	800372a <Manage_Received_Data_From_UART+0x11e>
 						(char*) "[ERROR WRITING FLASH] UNABLE TO WRITE DEVICE ID Variable\n");
 			} else {
 				Print_Debug_Data(
- 8003720:	482b      	ldr	r0, [pc, #172]	@ (80037d0 <Manage_Received_Data_From_UART+0x1c8>)
- 8003722:	f7ff ff5d 	bl	80035e0 <Print_Debug_Data>
+ 8003724:	482b      	ldr	r0, [pc, #172]	@ (80037d4 <Manage_Received_Data_From_UART+0x1c8>)
+ 8003726:	f7ff ff5d 	bl	80035e4 <Print_Debug_Data>
 						(char*) "[Writing DEVICE ID] DEVICE ID Written SUCCESFULLY \n");
 			}
 
 			HAL_Delay(100);
- 8003726:	2064      	movs	r0, #100	@ 0x64
- 8003728:	f000 fa2a 	bl	8003b80 <HAL_Delay>
+ 800372a:	2064      	movs	r0, #100	@ 0x64
+ 800372c:	f000 fa28 	bl	8003b80 <HAL_Delay>
 
 			// Convert ASCII characters to numeric values
 			uint8_t highValue = PIPE_Addr[0] - '0';
- 800372c:	7a3b      	ldrb	r3, [r7, #8]
- 800372e:	3b30      	subs	r3, #48	@ 0x30
- 8003730:	f887 3021 	strb.w	r3, [r7, #33]	@ 0x21
+ 8003730:	7a3b      	ldrb	r3, [r7, #8]
+ 8003732:	3b30      	subs	r3, #48	@ 0x30
+ 8003734:	f887 3021 	strb.w	r3, [r7, #33]	@ 0x21
 			uint8_t lowValue = PIPE_Addr[1] - '0';
- 8003734:	7a7b      	ldrb	r3, [r7, #9]
- 8003736:	3b30      	subs	r3, #48	@ 0x30
- 8003738:	f887 3020 	strb.w	r3, [r7, #32]
+ 8003738:	7a7b      	ldrb	r3, [r7, #9]
+ 800373a:	3b30      	subs	r3, #48	@ 0x30
+ 800373c:	f887 3020 	strb.w	r3, [r7, #32]
 			// Combine the digits into a single uint8_t
 			uint8_t nrf_8_t = (highValue * 10) + lowValue;
- 800373c:	f897 3021 	ldrb.w	r3, [r7, #33]	@ 0x21
- 8003740:	461a      	mov	r2, r3
- 8003742:	0092      	lsls	r2, r2, #2
- 8003744:	4413      	add	r3, r2
- 8003746:	005b      	lsls	r3, r3, #1
- 8003748:	b2da      	uxtb	r2, r3
- 800374a:	f897 3020 	ldrb.w	r3, [r7, #32]
- 800374e:	4413      	add	r3, r2
- 8003750:	77fb      	strb	r3, [r7, #31]
+ 8003740:	f897 3021 	ldrb.w	r3, [r7, #33]	@ 0x21
+ 8003744:	461a      	mov	r2, r3
+ 8003746:	0092      	lsls	r2, r2, #2
+ 8003748:	4413      	add	r3, r2
+ 800374a:	005b      	lsls	r3, r3, #1
+ 800374c:	b2da      	uxtb	r2, r3
+ 800374e:	f897 3020 	ldrb.w	r3, [r7, #32]
+ 8003752:	4413      	add	r3, r2
+ 8003754:	77fb      	strb	r3, [r7, #31]
 			//copy the gateway code of finding address, and save the address
 			uint64_t NRF_Pipe_Addr = Get_Pipe_Address(nrf_8_t);
- 8003752:	7ffb      	ldrb	r3, [r7, #31]
- 8003754:	4618      	mov	r0, r3
- 8003756:	f000 f847 	bl	80037e8 <Get_Pipe_Address>
- 800375a:	e9c7 0104 	strd	r0, r1, [r7, #16]
+ 8003756:	7ffb      	ldrb	r3, [r7, #31]
+ 8003758:	4618      	mov	r0, r3
+ 800375a:	f000 f845 	bl	80037e8 <Get_Pipe_Address>
+ 800375e:	e9c7 0104 	strd	r0, r1, [r7, #16]
 			//WRITE IT EEPROM
 			if (!ee_write_64(FLASH_ADDR_4_PIPE_ADDR_FOR_NRF, NRF_Pipe_Addr)) {
- 800375e:	e9d7 2304 	ldrd	r2, r3, [r7, #16]
- 8003762:	481c      	ldr	r0, [pc, #112]	@ (80037d4 <Manage_Received_Data_From_UART+0x1cc>)
- 8003764:	f7ff f87c 	bl	8002860 <ee_write_64>
- 8003768:	4603      	mov	r3, r0
- 800376a:	f083 0301 	eor.w	r3, r3, #1
- 800376e:	b2db      	uxtb	r3, r3
- 8003770:	2b00      	cmp	r3, #0
- 8003772:	d003      	beq.n	800377c <Manage_Received_Data_From_UART+0x174>
+ 8003762:	e9d7 2304 	ldrd	r2, r3, [r7, #16]
+ 8003766:	481c      	ldr	r0, [pc, #112]	@ (80037d8 <Manage_Received_Data_From_UART+0x1cc>)
+ 8003768:	f7ff f87a 	bl	8002860 <ee_write_64>
+ 800376c:	4603      	mov	r3, r0
+ 800376e:	f083 0301 	eor.w	r3, r3, #1
+ 8003772:	b2db      	uxtb	r3, r3
+ 8003774:	2b00      	cmp	r3, #0
+ 8003776:	d003      	beq.n	8003780 <Manage_Received_Data_From_UART+0x174>
 				Print_Debug_Data(
- 8003774:	4818      	ldr	r0, [pc, #96]	@ (80037d8 <Manage_Received_Data_From_UART+0x1d0>)
- 8003776:	f7ff ff33 	bl	80035e0 <Print_Debug_Data>
- 800377a:	e002      	b.n	8003782 <Manage_Received_Data_From_UART+0x17a>
+ 8003778:	4818      	ldr	r0, [pc, #96]	@ (80037dc <Manage_Received_Data_From_UART+0x1d0>)
+ 800377a:	f7ff ff33 	bl	80035e4 <Print_Debug_Data>
+ 800377e:	e002      	b.n	8003786 <Manage_Received_Data_From_UART+0x17a>
 						(char*) "[UART CB] UNABLE TO WRITE NRF PIPE ADDRES\n");
 			} else {
 				Print_Debug_Data(
- 800377c:	4817      	ldr	r0, [pc, #92]	@ (80037dc <Manage_Received_Data_From_UART+0x1d4>)
- 800377e:	f7ff ff2f 	bl	80035e0 <Print_Debug_Data>
+ 8003780:	4817      	ldr	r0, [pc, #92]	@ (80037e0 <Manage_Received_Data_From_UART+0x1d4>)
+ 8003782:	f7ff ff2f 	bl	80035e4 <Print_Debug_Data>
 						(char*) "[UART CB] VALID ADDRESS FOUND AND IS SAVED INTO THE EMULATED EEPROM\n");
 			}
 		}
 //IF THE COMMAND IS TO RESTART STM32
 		if (strncmp((char*) &UART_DATA[1], "RESTART", 7) == 0) {
- 8003782:	687b      	ldr	r3, [r7, #4]
- 8003784:	3301      	adds	r3, #1
- 8003786:	2207      	movs	r2, #7
- 8003788:	4915      	ldr	r1, [pc, #84]	@ (80037e0 <Manage_Received_Data_From_UART+0x1d8>)
- 800378a:	4618      	mov	r0, r3
- 800378c:	f004 fa09 	bl	8007ba2 <strncmp>
- 8003790:	4603      	mov	r3, r0
- 8003792:	2b00      	cmp	r3, #0
- 8003794:	d101      	bne.n	800379a <Manage_Received_Data_From_UART+0x192>
+ 8003786:	687b      	ldr	r3, [r7, #4]
+ 8003788:	3301      	adds	r3, #1
+ 800378a:	2207      	movs	r2, #7
+ 800378c:	4915      	ldr	r1, [pc, #84]	@ (80037e4 <Manage_Received_Data_From_UART+0x1d8>)
+ 800378e:	4618      	mov	r0, r3
+ 8003790:	f004 fa07 	bl	8007ba2 <strncmp>
+ 8003794:	4603      	mov	r3, r0
+ 8003796:	2b00      	cmp	r3, #0
+ 8003798:	d101      	bne.n	800379e <Manage_Received_Data_From_UART+0x192>
 			NVIC_SystemReset();
- 8003796:	f7ff fdff 	bl	8003398 <__NVIC_SystemReset>
+ 800379a:	f7ff fdfd 	bl	8003398 <__NVIC_SystemReset>
 		}
 	}
 }
- 800379a:	bf00      	nop
- 800379c:	3728      	adds	r7, #40	@ 0x28
- 800379e:	46bd      	mov	sp, r7
- 80037a0:	bd80      	pop	{r7, pc}
- 80037a2:	bf00      	nop
- 80037a4:	0800b984 	.word	0x0800b984
- 80037a8:	0800e800 	.word	0x0800e800
- 80037ac:	0800b994 	.word	0x0800b994
- 80037b0:	0800b9bc 	.word	0x0800b9bc
- 80037b4:	0800b9e8 	.word	0x0800b9e8
- 80037b8:	0800e804 	.word	0x0800e804
- 80037bc:	0800b9f0 	.word	0x0800b9f0
- 80037c0:	0800ba28 	.word	0x0800ba28
- 80037c4:	0800ba58 	.word	0x0800ba58
- 80037c8:	0800e818 	.word	0x0800e818
- 80037cc:	0800ba68 	.word	0x0800ba68
- 80037d0:	0800baa4 	.word	0x0800baa4
- 80037d4:	0800e808 	.word	0x0800e808
- 80037d8:	0800bad8 	.word	0x0800bad8
- 80037dc:	0800bb04 	.word	0x0800bb04
- 80037e0:	0800bb4c 	.word	0x0800bb4c
- 80037e4:	00000000 	.word	0x00000000
+ 800379e:	bf00      	nop
+ 80037a0:	3728      	adds	r7, #40	@ 0x28
+ 80037a2:	46bd      	mov	sp, r7
+ 80037a4:	bd80      	pop	{r7, pc}
+ 80037a6:	bf00      	nop
+ 80037a8:	0800b984 	.word	0x0800b984
+ 80037ac:	0800e800 	.word	0x0800e800
+ 80037b0:	0800b994 	.word	0x0800b994
+ 80037b4:	0800b9bc 	.word	0x0800b9bc
+ 80037b8:	0800b9e8 	.word	0x0800b9e8
+ 80037bc:	0800e804 	.word	0x0800e804
+ 80037c0:	0800b9f0 	.word	0x0800b9f0
+ 80037c4:	0800ba28 	.word	0x0800ba28
+ 80037c8:	0800ba58 	.word	0x0800ba58
+ 80037cc:	0800e818 	.word	0x0800e818
+ 80037d0:	0800ba68 	.word	0x0800ba68
+ 80037d4:	0800baa4 	.word	0x0800baa4
+ 80037d8:	0800e808 	.word	0x0800e808
+ 80037dc:	0800bad8 	.word	0x0800bad8
+ 80037e0:	0800bb04 	.word	0x0800bb04
+ 80037e4:	0800bb4c 	.word	0x0800bb4c
 
 080037e8 <Get_Pipe_Address>:
 
