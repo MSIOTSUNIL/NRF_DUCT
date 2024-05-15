@@ -1,7 +1,0 @@
-../Core/Src/ee.c:8:6:ee_write_16	32	static
-../Core/Src/ee.c:26:10:ee_read_16	24	static
-../Core/Src/ee.c:38:6:ee_write_32	32	static
-../Core/Src/ee.c:56:10:ee_read_32	24	static
-../Core/Src/ee.c:69:6:ee_write_64	32	static
-../Core/Src/ee.c:88:10:ee_read_64	32	static
-../Core/Src/ee.c:100:6:ee_format_page	40	static
